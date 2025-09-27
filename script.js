@@ -5,8 +5,14 @@ const jsonURL = 'https://raw.githubusercontent.com/Kaytheprogrammingidiot/bv/ref
 const webhookURL = 'https://discord.com/api/webhooks/1421356441633034345/6eYT-diTzt1Tb4hJxqHHK8UmBdqYB1mXeFkgNgjXfpuNZs-RvegE-nMFpW9wrHveanT6';
 
 fetch(jsonURL)
-  .then(res => res.json())
-  .then(options => {
+  .then(res => {
+    if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
+    return res.json();
+  })
+  .then(data => {
+    console.log('Fetched JSON:', data);
+
+    const options = Array.isArray(data) ? data : data.options;
     const hash = JSON.stringify(options);
     const storedHash = localStorage.getItem('voteHash');
 
