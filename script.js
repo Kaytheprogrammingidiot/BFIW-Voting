@@ -1,6 +1,7 @@
 const form = document.getElementById('voteForm');
 const resultsDiv = document.getElementById('results');
 
+// Force cache-busting to always get fresh JSON
 const jsonURL = 'https://raw.githubusercontent.com/Kaytheprogrammingidiot/bv/refs/heads/main/v.json?t=' + Date.now();
 const webhookURL = 'https://discord.com/api/webhooks/1421356441633034345/6eYT-diTzt1Tb4hJxqHHK8UmBdqYB1mXeFkgNgjXfpuNZs-RvegE-nMFpW9wrHveanT6';
 
@@ -12,7 +13,7 @@ fetch(jsonURL)
   .then(data => {
     console.log('Fetched JSON:', data);
 
-    // Force unwrap if JSON is wrapped
+    // Unwrap if needed
     const options = Array.isArray(data) ? data : data.options;
     if (!Array.isArray(options)) {
       form.innerHTML = '<p>Invalid JSON format.</p>';
@@ -24,8 +25,8 @@ fetch(jsonURL)
 
     // Reset vote if JSON changed
     if (storedHash !== hash) {
-      localStorage.setItem('voteHash', hash);
       localStorage.removeItem('hasVoted');
+      localStorage.setItem('voteHash', hash); // ✅ Move this BEFORE checking hasVoted
     }
 
     const hasVoted = localStorage.getItem('hasVoted') === 'true';
