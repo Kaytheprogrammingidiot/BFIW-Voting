@@ -1,27 +1,18 @@
 const form = document.getElementById('voteForm');
 const resultsDiv = document.getElementById('results');
 
-// Your GitHub raw JSON URL
 const jsonURL = 'https://raw.githubusercontent.com/Kaytheprogrammingidiot/bv/refs/heads/main/v.json';
-
-// Utility: create a simple hash from the JSON array
-function hashOptions(options) {
-  return JSON.stringify(options);
-}
+const webhookURL = 'https://discord.com/api/webhooks/1421356441633034345/6eYT-diTzt1Tb4hJxqHHK8UmBdqYB1mXeFkgNgjXfpuNZs-RvegE-nMFpW9wrHveanT6';
 
 fetch(jsonURL)
-  .then(response => {
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-  })
+  .then(res => res.json())
   .then(options => {
-    const currentHash = hashOptions(options);
+    const hash = JSON.stringify(options);
     const storedHash = localStorage.getItem('voteHash');
     const hasVoted = localStorage.getItem('hasVoted') === 'true';
 
-    // If JSON changed, reset vote
-    if (storedHash !== currentHash) {
-      localStorage.setItem('voteHash', currentHash);
+    if (storedHash !== hash) {
+      localStorage.setItem('voteHash', hash);
       localStorage.removeItem('hasVoted');
     }
 
@@ -46,20 +37,24 @@ fetch(jsonURL)
     button.textContent = 'Submit Vote';
     form.appendChild(button);
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const vote = document.querySelector('input[name="vote"]:checked')?.value;
-      if (!vote) {
-        alert('Please select an option!');
-        return;
-      }
+      if (!vote) return alert('Please select an option!');
 
       localStorage.setItem('hasVoted', 'true');
+      form.innerHTML = '';
       resultsDiv.innerHTML = `<p>Thanks for voting for <strong>${vote}</strong>!</p>`;
-      form.innerHTML = ''; // Clear form
+
+      // Send vote to Discord webhook
+      await fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: `🗳️ New vote: ${vote}` })
+      });
     });
   })
-  .catch(error => {
+  .catch(err => {
     form.innerHTML = '<p>Failed to load options.</p>';
-    console.error('Error loading JSON:', error);
+    console.error(err);
   });
