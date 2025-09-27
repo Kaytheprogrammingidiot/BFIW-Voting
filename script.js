@@ -42,7 +42,10 @@ fetch(jsonURL)
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const vote = document.querySelector('input[name="vote"]:checked')?.value;
-      if (!vote) return alert('Please select an option!');
+      if (!vote) {
+        alert('Please select an option!');
+        return;
+      }
 
       localStorage.setItem('hasVoted', 'true');
       form.innerHTML = '';
@@ -58,5 +61,5 @@ fetch(jsonURL)
   })
   .catch(err => {
     form.innerHTML = '<p>Failed to load options.</p>';
-    console.error(err);
+    console.error('Error loading JSON:', err);
   });
