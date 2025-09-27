@@ -12,7 +12,13 @@ fetch(jsonURL)
   .then(data => {
     console.log('Fetched JSON:', data);
 
+    // Force unwrap if JSON is wrapped
     const options = Array.isArray(data) ? data : data.options;
+    if (!Array.isArray(options)) {
+      form.innerHTML = '<p>Invalid JSON format.</p>';
+      return;
+    }
+
     const hash = JSON.stringify(options);
     const storedHash = localStorage.getItem('voteHash');
 
@@ -24,7 +30,7 @@ fetch(jsonURL)
 
     const hasVoted = localStorage.getItem('hasVoted') === 'true';
 
-    if (!Array.isArray(options) || options.length === 0) {
+    if (options.length === 0) {
       form.innerHTML = '<p>No one to vote for!</p>';
       return;
     }
@@ -57,7 +63,6 @@ fetch(jsonURL)
       form.innerHTML = '';
       resultsDiv.innerHTML = `<p>Thanks for voting for <strong>${vote}</strong>!</p>`;
 
-      // Send vote to Discord
       await fetch(webhookURL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
