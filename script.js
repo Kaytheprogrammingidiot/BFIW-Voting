@@ -1,7 +1,7 @@
 const form = document.getElementById('voteForm');
 const resultsDiv = document.getElementById('results');
 
-const jsonURL = 'https://raw.githubusercontent.com/Kaytheprogrammingidiot/bv/refs/heads/main/v.json';
+const jsonURL = 'https://raw.githubusercontent.com/Kaytheprogrammingidiot/bv/refs/heads/main/v.json?t=' + Date.now();
 const webhookURL = 'https://discord.com/api/webhooks/1421356441633034345/6eYT-diTzt1Tb4hJxqHHK8UmBdqYB1mXeFkgNgjXfpuNZs-RvegE-nMFpW9wrHveanT6';
 
 fetch(jsonURL)
