@@ -9,19 +9,21 @@ fetch(jsonURL)
   .then(options => {
     const hash = JSON.stringify(options);
     const storedHash = localStorage.getItem('voteHash');
-    const hasVoted = localStorage.getItem('hasVoted') === 'true';
 
+    // Reset vote if JSON changed
     if (storedHash !== hash) {
       localStorage.setItem('voteHash', hash);
       localStorage.removeItem('hasVoted');
     }
+
+    const hasVoted = localStorage.getItem('hasVoted') === 'true';
 
     if (!Array.isArray(options) || options.length === 0) {
       form.innerHTML = '<p>No one to vote for!</p>';
       return;
     }
 
-    if (localStorage.getItem('hasVoted') === 'true') {
+    if (hasVoted) {
       form.innerHTML = '<p>You already voted!</p>';
       return;
     }
@@ -46,7 +48,7 @@ fetch(jsonURL)
       form.innerHTML = '';
       resultsDiv.innerHTML = `<p>Thanks for voting for <strong>${vote}</strong>!</p>`;
 
-      // Send vote to Discord webhook
+      // Send vote to Discord
       await fetch(webhookURL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
