@@ -1,0 +1,30 @@
+body {
+  font-family: sans-serif;
+  background: #e0f7f7;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+form label {
+  display: block;
+  margin: 1rem 0;
+}
+button {
+  background: #00bfa5;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#results {
+  margin-top: 2rem;
+}
