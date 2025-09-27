@@ -1,6 +1,6 @@
 const form = document.getElementById('voteForm');
 const resultsDiv = document.getElementById('results');
-const jsonURL = 'https://raw.githubusercontent.com/your-username/your-repo/main/vote-options.json';
+const jsonURL = 'https://raw.githubusercontent.com/Kaytheprogrammingidiot/bv/refs/heads/main/v.json';
 
 let hasVoted = false;
 
